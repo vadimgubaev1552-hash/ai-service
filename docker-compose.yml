@@ -1,0 +1,24 @@
+services:
+  ai-service:
+    build: ./ai-service
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./ai-service/.env
+    restart: unless-stopped
+
+  backend:
+    build: ./ring-of-backend
+    ports:
+      - "8000:80"
+    depends_on:
+      - ai-service
+    restart: unless-stopped
+
+  frontend:
+    build: ./ring-of-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
